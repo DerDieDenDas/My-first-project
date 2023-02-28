@@ -1,3 +1,42 @@
+/*
+#include "mylib.h"
+
+struct studentas {
+    string vardas, pavarde;
+    vector<float> paz;
+    int egz;
+    float gal_vid, gal_med;
+};
+
+const float WEIGHT_PAZ = 0.4;
+const float WEIGHT_EGZ = 0.6;
+
+void balas(const studentas& temp) {
+    //vidurkis
+    float vid = 0;
+    for (const auto& i : temp.paz) {
+        vid += i;
+    }
+    float avg = vid / temp.paz.size();
+    temp.gal_vid = WEIGHT_PAZ * avg + WEIGHT_EGZ * temp.egz;
+
+    //mediana
+    vector<float> sorted_paz = temp.paz;
+    sort(sorted_paz.begin(), sorted_paz.end());
+    int vidurys = sorted_paz.size() / 2;
+    float mediana = sorted_paz.size() % 2 == 0 ? (sorted_paz[vidurys - 1] + sorted_paz[vidurys]) / 2.0 : sorted_paz[vidurys];
+    temp.gal_med = WEIGHT_PAZ * mediana + WEIGHT_EGZ * temp.egz;
+}
+
+void pild(studentas& temp) {
+    char uzklausa = 'n';
+    cout << "Iveskite vardą: ";
+    cin >> temp.vardas;
+    cout << "Įveskite pavardę: ";
+    cin >> temp.pavarde;
+    cout << "Suveskite pažymius. Baigę įvedimą, spauskite bet kokią raidę:"
+*/
+
 #include "mylib.h"
 
 struct studentas{
@@ -54,7 +93,7 @@ void pild(studentas &temp){
     cin >> temp.vardas;
     cout << "Įveskite pavardę: ";
     cin >> temp.pavarde;
-    cout << "Įveskite pažymius. Baigę - įveskite bet kokią raidę: ";
+    cout << "Įveskite pažymius. Baigę įveskite bet kokią raidę: ";
   
     float x;
     while (cin >> x){
