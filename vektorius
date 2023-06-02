@@ -10,31 +10,6 @@ struct studentas {
 
 const float WEIGHT_PAZ = 0.4;
 const float WEIGHT_EGZ = 0.6;
-
-void balas(const studentas& temp) {
-    //vidurkis
-    float vid = 0;
-    for (const auto& i : temp.paz) {
-        vid += i;
-    }
-    float avg = vid / temp.paz.size();
-    temp.gal_vid = WEIGHT_PAZ * avg + WEIGHT_EGZ * temp.egz;
-
-    //mediana
-    vector<float> sorted_paz = temp.paz;
-    sort(sorted_paz.begin(), sorted_paz.end());
-    int vidurys = sorted_paz.size() / 2;
-    float mediana = sorted_paz.size() % 2 == 0 ? (sorted_paz[vidurys - 1] + sorted_paz[vidurys]) / 2.0 : sorted_paz[vidurys];
-    temp.gal_med = WEIGHT_PAZ * mediana + WEIGHT_EGZ * temp.egz;
-}
-
-void pild(studentas& temp) {
-    char uzklausa = 'n';
-    cout << "Iveskite vardą: ";
-    cin >> temp.vardas;
-    cout << "Įveskite pavardę: ";
-    cin >> temp.pavarde;
-    cout << "Suveskite pažymius. Baigę įvedimą, spauskite bet kokią raidę:"
 */
 
 #include "mylib.h"
@@ -71,52 +46,53 @@ void balas(studentas &temp){
 
 void balas(studentas& temp) {
     //vidurkis
-    float vid = accumulate(temp.paz.begin(), temp.paz.end(), 0.0f) / temp.paz.size();
-    temp.gal_vid = 0.4f * vid + 0.6f * temp.egz;
+    float vid = accumulate(temp.paz.begin(), temp.paz.end(), 0.0f) / temp.paz.size(); // Skaičiuojamas pažymių vidurkis
+    temp.gal_vid = 0.4f * vid + 0.6f * temp.egz; // Skaičiuojamas galutinis įvertinimas pagal vidurkį
 
     //mediana
     int size = temp.paz.size();
-    sort(temp.paz.begin(), temp.paz.end());
+    sort(temp.paz.begin(), temp.paz.end()); // Rūšiuojami pažymiai didėjimo tvarka
     float mediana;
     if (size % 2 == 0) {
-        mediana = (temp.paz[size / 2 - 1] + temp.paz[size / 2]) / 2.0f;
+        mediana = (temp.paz[size / 2 - 1] + temp.paz[size / 2]) / 2.0f; // Skaičiuojama mediana, jei pažymių skaičius lyginis
     }
     else {
-        mediana = temp.paz[size / 2];
+        mediana = temp.paz[size / 2]; // Skaičiuojama mediana, jei pažymių skaičius nelyginis
     }
-    temp.gal_med = 0.4f * mediana + 0.6f * temp.egz;
+    temp.gal_med = 0.4f * mediana + 0.6f * temp.egz; // Skaičiuojamas galutinis įvertinimas pagal medianą
 }
 
 void pild(studentas &temp){
     char uzklausa = 'n';
     cout << "Įveskite vardą: ";
-    cin >> temp.vardas;
+    cin >> temp.vardas; // Įvedamas studento vardas
     cout << "Įveskite pavardę: ";
-    cin >> temp.pavarde;
-    cout << "Įveskite pažymius. Baigę įveskite bet kokią raidę: ";
+    cin >> temp.pavarde; // Įvedama studento pavardė
+    cout << "Įveskite pažymius. Baigę įvedimą, spauskite bet kokią raidę: ";
   
     float x;
     while (cin >> x){
-       temp.paz.push_back(x);
+       temp.paz.push_back(x); // Įvestas pažymys pridedamas prie pažymių vektoriaus
     }
     cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n'); // Išvaloma įvesties srautas
+
     cout << "Įveskite egzamino pažymį: ";
-    do { //draudž įvesti raides
-        cin >> temp.egz;
+    do { // Draudžiama įvesti raides
+        cin >> temp.egz; // Įvedamas egzamino pažymys
         cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n'); // Išvaloma įvesties srautas
     } while (temp.egz==0);
   
     cout << "Ar norite atsitiktinių balo rezultatų? y/n ";
     cin >> uzklausa;
     if (uzklausa == 'y' || uzklausa == 'Y') {
         srand(time(NULL));
-        temp.gal_vid = (float)rand()/RAND_MAX*10;
-        temp.gal_med = (float)rand()/RAND_MAX*10;
+        temp.gal_vid = (float)rand()/RAND_MAX*10; // Sugeneruojamas atsitiktinis galutinis įvertinimas pagal vidurkį
+        temp.gal_med = (float)rand()/RAND_MAX*10; // Sugeneruojamas atsitiktinis galutinis įvertinimas pagal medianą
     }
     else if (!temp.paz.empty()) {
-        balas(temp);
+        balas(temp); // Skaičiuojamas galutinis įvertinimas
     }
 }
 
@@ -127,26 +103,26 @@ void spausd(studentas &temp){
 }
 
 int main(){
-    vector<studentas> mas;
-    studentas tempas;
+    vector<studentas> mas; // Sukuriamas studentų vektorius
+    studentas tempas; // Sukuriamas laikinas studento objektas
     char uzklausa='n';
 
     do {
-        pild(tempas);
+        pild(tempas); // Užpildomas studento objektas
         if (tempas.paz.empty()) {
-            cout << "Neįvedėt jokio pažymio. Prašau iš naujo įvesti studento duomenis." << endl;
-            tempas.paz.clear();
-            pild(tempas);
+            cout << "Neįvedėte jokio pažymio. Prašome iš naujo įvesti studento duomenis." << endl;
+            tempas.paz.clear(); // Išvalomas pažymių vektorius
+            pild(tempas); // Vartotojui leidžiama iš naujo įvesti duomenis
         }
-        mas.push_back(tempas);
-        tempas.paz.clear();      //prieš kitą panaudojimą išvalomas vektorius 
-        cout << "Norėdami baigti darbą - spauskite n. Norėdami tęsti spauskite bet kokį klavišą" << endl;
+        mas.push_back(tempas); // Pridedamas užpildytas studento objektas į vektorių
+        tempas.paz.clear(); // Išvalomas pažymių vektorius prieš kitą panaudojimą
+        cout << "Norėdami baigti darbą - spauskite n. Norėdami tęsti - spauskite bet kokį klavišą" << endl;
         cin >> uzklausa;
     }  while (uzklausa!='n' && uzklausa!='N');
     cout << endl << endl << setw(10) << left << "Vardas" << setw(15) << left << "Pavardė" << setw(17) << "Galutinis (Vid.) " << setw(18) << "/ Galutinis (Med.)";
     cout << endl << "------------------------------------------------------------" << endl;
-    for (auto &i : mas) spausd(i);
+    for (auto &i : mas) spausd(i); // Atspausdinami visi studentai
     cout << endl;
-    for (auto &i : mas) i.paz.clear();
-    mas.clear();
+    for (auto &i : mas) i.paz.clear(); // Išvalomi pažymių vektoriai kiekvieno studento objekte
+    mas.clear(); // Išvalomas studentų vektorius
 }
